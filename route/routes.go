@@ -14,7 +14,7 @@ func init() {
 
 func RegisterRoutes() *httprouter.Router {
 	router.GET("/api/set", set.FindAll)
-	// router.POST("/set", set.Create)
+	router.POST("/api/set", set.Create)
 
 	return router
 }
