@@ -1,7 +1,7 @@
 package database
 
 import (
-	"flashcards-api/config"
+	"flashcards-api/app/config"
 	"fmt"
 
 	"gorm.io/driver/mysql"

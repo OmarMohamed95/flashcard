@@ -6,9 +6,14 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func InitRouter() *httprouter.Router {
-	router := httprouter.New()
-	router.GET("/set", set.FindAll)
+var router *httprouter.Router
+
+func init() {
+	router = httprouter.New()
+}
+
+func RegisterRoutes() *httprouter.Router {
+	router.GET("/api/set", set.FindAll)
 	// router.POST("/set", set.Create)
 
 	return router

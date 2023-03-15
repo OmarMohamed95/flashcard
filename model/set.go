@@ -1,7 +1,7 @@
 package model
 
 import (
-	"flashcards-api/database"
+	"flashcards-api/app/database"
 
 	"gorm.io/gorm"
 )
