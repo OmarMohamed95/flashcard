@@ -1,7 +1,7 @@
 package route
 
 import (
-	"flashcards-api/controller/set"
+	setController "flashcards-api/controller/set"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -13,11 +13,11 @@ func init() {
 }
 
 func RegisterRoutes() *httprouter.Router {
-	router.GET("/api/set", set.FindAll)
-	router.GET("/api/set/:id", set.Find)
-	router.POST("/api/set", set.Create)
-	router.PUT("/api/set/:id", set.Update)
-	router.DELETE("/api/set/:id", set.Delete)
+	router.GET("/api/set", setController.FindAll)
+	router.GET("/api/set/:id", setController.Find)
+	router.POST("/api/set", setController.Create)
+	router.PUT("/api/set/:id", setController.Update)
+	router.DELETE("/api/set/:id", setController.Delete)
 
 	return router
 }

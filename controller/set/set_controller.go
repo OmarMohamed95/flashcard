@@ -3,7 +3,7 @@ package set
 import (
 	"encoding/json"
 	"flashcards-api/app/api"
-	"flashcards-api/repository/set"
+	setRepository "flashcards-api/repository/set"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -12,7 +12,7 @@ import (
 )
 
 func Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	var set set.Set
+	var set setRepository.Set
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		api.Json(w).RespondError(api.ErrorRes{Error: "Error while parsing body", StatusCode: http.StatusBadRequest})
@@ -30,7 +30,7 @@ func Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 func FindAll(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	sets := set.GetAll()
+	sets := setRepository.GetAll()
 	api.Json(w).Respond(api.DataRes{
 		Data:          sets,
 		StatusCode:    http.StatusOK,
@@ -45,7 +45,7 @@ func Find(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		return
 	}
 
-	set := set.FindById(int64(id))
+	set := setRepository.FindById(int64(id))
 	if set.ID == 0 {
 		api.Json(w).RespondError(api.ErrorRes{Error: "Set not found", StatusCode: http.StatusNotFound})
 		return
@@ -73,7 +73,7 @@ func Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	}
 
 	json.Unmarshal(body, &setUpdates)
-	set := set.Update(int64(id), setUpdates)
+	set := setRepository.Update(int64(id), setUpdates)
 	if set.ID == 0 {
 		api.Json(w).RespondError(api.ErrorRes{Error: "Set not found", StatusCode: http.StatusNotFound})
 		return
@@ -93,7 +93,7 @@ func Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		return
 	}
 
-	set.Delete(int64(id))
+	setRepository.Delete(int64(id))
 	api.Json(w).Respond(api.DataRes{
 		Data:          []int8{},
 		StatusCode:    http.StatusOK,
