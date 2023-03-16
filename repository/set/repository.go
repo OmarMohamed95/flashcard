@@ -27,3 +27,22 @@ func GetAll() []model.Set {
 func (s *Set) Create() {
 	db.Create(&s)
 }
+
+func FindById(id int64) model.Set {
+	var set model.Set
+	db.Where("ID = ?", id).Find(&set)
+
+	return set
+}
+
+func Update(id int64, setUpdates map[string]interface{}) model.Set {
+	set := FindById(id)
+	db.Model(&set).Where("ID = ?", id).Updates(setUpdates)
+
+	return set
+}
+
+func Delete(id int64) {
+	var set model.Set
+	db.Where("ID = ?", id).Delete(&set)
+}
