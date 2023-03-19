@@ -1,6 +1,7 @@
 package route
 
 import (
+	authController "flashcards-api/controller/auth"
 	cardController "flashcards-api/controller/card"
 	setController "flashcards-api/controller/set"
 
@@ -14,6 +15,10 @@ func init() {
 }
 
 func RegisterRoutes() *httprouter.Router {
+	// Auth
+	router.POST("/api/login", authController.Login)
+	router.POST("/api/register", authController.Register)
+
 	// Set
 	router.GET("/api/set", setController.FindAll)
 	router.GET("/api/set/:id", setController.Find)

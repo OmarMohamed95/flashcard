@@ -3,8 +3,10 @@ module flashcards-api
 go 1.19
 
 require (
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/spf13/viper v1.15.0
+	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
 	gorm.io/driver/mysql v1.4.7
 	gorm.io/gorm v1.24.6
 )
