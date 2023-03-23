@@ -15,6 +15,5 @@ type Card struct {
 }
 
 func init() {
-	db := database.Connect()
-	db.AutoMigrate(&Card{})
+	database.DB.AutoMigrate(&Card{})
 }

@@ -12,6 +12,5 @@ type Set struct {
 }
 
 func init() {
-	db := database.Connect()
-	db.AutoMigrate(&Set{})
+	database.DB.AutoMigrate(&Set{})
 }
