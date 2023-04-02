@@ -6,33 +6,42 @@ import (
 	cardController "flashcards-api/controller/card"
 	setController "flashcards-api/controller/set"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/go-chi/chi/v5"
 )
 
-var router *httprouter.Router
+var router *chi.Mux
 
 func init() {
-	router = httprouter.New()
+	router = chi.NewRouter()
 }
 
-func RegisterRoutes() *httprouter.Router {
-	// Auth
-	router.POST("/api/login", authController.Login)
-	router.POST("/api/register", authController.Register)
-
-	// Set
-	router.GET("/api/set", security.Auth(setController.FindAll))
-	router.GET("/api/set/:id", security.Auth(setController.Find))
-	router.POST("/api/set", security.Auth(setController.Create))
-	router.PUT("/api/set/:id", security.Auth(setController.Update))
-	router.DELETE("/api/set/:id", security.Auth(setController.Delete))
-
-	// Card
-	router.GET("/api/card", security.Auth(cardController.FindAll))
-	router.GET("/api/card/:id", security.Auth(cardController.Find))
-	router.POST("/api/card", security.Auth(cardController.Create))
-	router.PUT("/api/card/:id", security.Auth(cardController.Update))
-	router.DELETE("/api/card/:id", security.Auth(cardController.Delete))
+func RegisterRoutes() *chi.Mux {
+	handleAPI()
 
 	return router
+}
+
+func handleAPI() {
+	// Auth
+	router.Post("/api/login", authController.Login)
+	router.Post("/api/register", authController.Register)
+
+	// Secured Routes
+	router.Route("/api", func(router chi.Router) {
+		router.Use(security.Auth)
+
+		// Set
+		router.Get("/set", setController.FindAll)
+		router.Get("/set/{id}", setController.Find)
+		router.Post("/set", setController.Create)
+		router.Put("/set/{id}", setController.Update)
+		router.Delete("/set/{id}", setController.Delete)
+
+		// Card
+		router.Get("/card", cardController.FindAll)
+		router.Get("/card/{id}", cardController.Find)
+		router.Post("/card", cardController.Create)
+		router.Put("/card/{id}", cardController.Update)
+		router.Delete("/card/{id}", cardController.Delete)
+	})
 }

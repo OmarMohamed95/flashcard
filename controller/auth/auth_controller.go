@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -17,7 +16,7 @@ type credentials struct {
 	Password string `json:"password"`
 }
 
-func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func Register(w http.ResponseWriter, r *http.Request) {
 	var user userRepository.User
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -44,7 +43,7 @@ func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	})
 }
 
-func Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func Login(w http.ResponseWriter, r *http.Request) {
 	var credentials credentials
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {

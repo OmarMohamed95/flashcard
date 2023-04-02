@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/go-chi/chi/v5"
 )
 
-func Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func Create(w http.ResponseWriter, r *http.Request) {
 	var card cardRepository.Card
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -29,7 +29,7 @@ func Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	})
 }
 
-func FindAll(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func FindAll(w http.ResponseWriter, r *http.Request) {
 	cards := cardRepository.GetAll()
 	api.Json(w).Respond(api.DataRes{
 		Data:          cards,
@@ -38,8 +38,8 @@ func FindAll(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	})
 }
 
-func Find(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	id, err := strconv.Atoi(ps.ByName("id"))
+func Find(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		api.Json(w).RespondError(api.ErrorRes{Error: "Invalid card id", StatusCode: http.StatusBadRequest})
 		return
@@ -58,8 +58,8 @@ func Find(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	})
 }
 
-func Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	id, err := strconv.Atoi(ps.ByName("id"))
+func Update(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		api.Json(w).RespondError(api.ErrorRes{Error: "Invalid card id", StatusCode: http.StatusBadRequest})
 		return
@@ -86,8 +86,8 @@ func Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	})
 }
 
-func Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	id, err := strconv.Atoi(ps.ByName("id"))
+func Delete(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		api.Json(w).RespondError(api.ErrorRes{Error: "Invalid card id", StatusCode: http.StatusBadRequest})
 		return

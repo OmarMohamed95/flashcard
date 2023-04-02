@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/julienschmidt/httprouter"
 )
 
 type JWT struct {
@@ -17,8 +16,8 @@ type JWT struct {
 
 var Token JWT
 
-func Auth(h httprouter.Handle) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func Auth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := r.Header.Get("Authorization")
 
 		if tokenString == "" {
@@ -39,10 +38,10 @@ func Auth(h httprouter.Handle) httprouter.Handle {
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			Token.Token = token
 			Token.Claims = claims
-			h(w, r, ps)
+			next.ServeHTTP(w, r)
 		} else {
 			w.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		}
-	}
+	})
 }
